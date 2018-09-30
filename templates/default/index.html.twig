@@ -1,0 +1,52 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Witam {{ controller_name }}!{% endblock %}
+
+{% block body %}
+<div class="form">
+{{ form_start(form, {'attr': {'id': 'my_form'}}) }}
+{{ form_errors(form) }}
+{{ form_widget(form) }}
+{{ form_end(form) }}
+</div> 
+<div id="error"></div>
+<table id="dane"></table>
+
+{% block javacript %} 
+<script type="text/javascript">
+	$(document).ready(function() {
+		 $(document).on('submit', '#my_form', function(e) {
+				$('#task_save').text('loading');
+				$('#dane').empty();
+				$('#error').empty();
+				e.preventDefault();
+				$.ajax({
+					type: "POST",
+					url: "send",
+					data: new FormData(this), 
+					contentType: false, 
+					processData: false, 
+					success: function(response){
+						if(response.success == true) {
+						
+							$('#dane').append('<tr><td><a href="/file/' + response.jsondata[0] + '">' + response.jsondata[0] + '<a></td></tr>');
+							$('#dane').append('<tr><td><p>'  + response.jsondata[1] + '</p></td></tr>');
+							$('#task_save').text('Wyslij');
+						
+						}
+						else
+						{ 
+							$('#error').append('<p>'  + response.error + '</p>');
+							$('#task_save').text('Wyslij');
+						}
+					}
+			
+				})
+			});
+			
+	
+	});
+</script>	
+
+{% endblock %}
+{% endblock %}
