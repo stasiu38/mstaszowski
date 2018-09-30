@@ -1,0 +1,8 @@
+RewriteEngine on
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ /index.php?path=$1 [NC,L,QSA]
+AuthType Basic
+AuthName "My Protected Area"
+AuthUserFile /home/stasiu38/ftp/domains/mstaszowski/public/.htpasswd
+Require valid-user
